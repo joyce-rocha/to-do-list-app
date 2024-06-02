@@ -8,7 +8,7 @@ const input_content = ref("");
 const input_category = ref(null);
 
 const todos_asc = computed(() =>
-  todos.value.sort((a, b) => {
+  [...todos.value].sort((a, b) => {
     return a.createdAt - b.createdAt;
   })
 );
@@ -55,16 +55,16 @@ onMounted(() => {
   <main class="app">
     <section class="greeting">
       <h2 class="title">
-        What's up,
+        E aí,
         <input type="text" id="name" placeholder="Name here" v-model="name" />
       </h2>
     </section>
 
     <section class="create-todo">
-      <h3>CREATE A TODO</h3>
+      <h3>Crie uma tarefa</h3>
 
       <form id="new-todo-form" @submit.prevent="addTodo">
-        <h4>What's on your todo list?</h4>
+        <h4>O que há na sua lista?</h4>
         <input
           type="text"
           name="content"
@@ -73,7 +73,7 @@ onMounted(() => {
           v-model="input_content"
         />
 
-        <h4>Pick a category</h4>
+        <h4>Selecione uma categoria</h4>
         <div class="options">
           <label>
             <input
@@ -84,7 +84,7 @@ onMounted(() => {
               v-model="input_category"
             />
             <span class="bubble business"></span>
-            <div>Business</div>
+            <div>Negócios</div>
           </label>
 
           <label>
@@ -96,27 +96,29 @@ onMounted(() => {
               v-model="input_category"
             />
             <span class="bubble personal"></span>
-            <div>Personal</div>
+            <div>Pessoal</div>
           </label>
         </div>
 
-        <input type="submit" value="Add todo" />
+        <input type="submit" value="Adicionar tarefa" />
       </form>
     </section>
 
     <section class="todo-list">
-      <h3>TODO LIST</h3>
+      <h3>Lista de Tarefas</h3>
       <div class="list" id="todo-list">
         <div
           v-for="todo in todos_asc"
-          :class="`todo-item ${todo.done && 'done'}`"
+          :key="todo.createdAt"
+          :class="['todo-item', { done: todo.done }]"
         >
           <label>
             <input type="checkbox" v-model="todo.done" />
             <span
-              :class="`bubble ${
-                todo.category == 'business' ? 'business' : 'personal'
-              }`"
+              :class="[
+                'bubble',
+                todo.category === 'business' ? 'business' : 'personal',
+              ]"
             ></span>
           </label>
 
@@ -125,7 +127,7 @@ onMounted(() => {
           </div>
 
           <div class="actions">
-            <button class="delete" @click="removeTodo(todo)">Delete</button>
+            <button class="delete" @click="removeTodo(todo)">Apagar</button>
           </div>
         </div>
       </div>
